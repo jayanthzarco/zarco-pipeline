@@ -1,5 +1,9 @@
-import maya.cmds as cmds
+import sys
 
+import maya.cmds as cmds
+import os
+# sys.path.append(os.path.abspath(__file__))
+sys.path.append('E:/Git___/zarco-pipeline')
 
 class ZarcoMenuBar:
     def __init__(self):
