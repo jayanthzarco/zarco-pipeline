@@ -56,19 +56,26 @@ class ZarcoMenuBar:
 
     @staticmethod
     def _jz_renamer():
-        print("calling JZ_Renamer")
+        from packages.maya.jz_renamer import RenameUI
+        RenameUI()
 
     @staticmethod
     def _scene_optimizer():
         print("calling Scene Optimizer")
+        from packages.maya import scene_optimizer
+        scene_optimizer.run()
 
     @staticmethod
     def _quick_renderer():
         print("calling Quick Renderer")
+        from packages.maya import quick_renderer
+        quick_renderer.run()
 
     @staticmethod
     def _duplicate_node_renamer():
         print("calling Duplicate Node Renamer")
+        from packages.maya import duplicate_node_renamer
+        duplicate_node_renamer.run()
 
 
 if __name__ == '__main__':
