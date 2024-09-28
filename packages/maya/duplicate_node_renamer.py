@@ -1,5 +1,3 @@
-# this tool loads the all the nodes with same name and helps to rename them
-
 import maya.cmds as cmds
 from PySide2 import QtWidgets, QtCore
 import maya.OpenMayaUI as omui
@@ -7,11 +5,12 @@ import shiboken2
 
 
 class DuplicateNodeRenamerUI(QtWidgets.QWidget):
-    def __init__(self):
-        super(DuplicateNodeRenamerUI, self).__init__()
+    def __init__(self, parent=None):
+        super(DuplicateNodeRenamerUI, self).__init__(parent)
         self.setWindowTitle("Duplicate Node Renamer")
         self.setMinimumWidth(350)
         self.setMinimumHeight(250)
+        self.setWindowFlags(QtCore.Qt.Window)  # Ensure it behaves as a separate window
 
         self.layout = QtWidgets.QVBoxLayout()
 
@@ -41,7 +40,10 @@ class DuplicateNodeRenamerUI(QtWidgets.QWidget):
 
     def refresh_list(self):
         self.node_list_widget.clear()
-        self.checkbox_layout = QtWidgets.QVBoxLayout()
+        while self.checkbox_layout.count():
+            widget = self.checkbox_layout.takeAt(0).widget()
+            if widget:
+                widget.deleteLater()
 
         # Get all nodes in the scene
         all_nodes = cmds.ls(dag=True, long=True)
@@ -103,10 +105,12 @@ def maya_main_window():
 def run():
     global duplicate_node_renamer_ui
 
-    duplicate_node_renamer_ui = DuplicateNodeRenamerUI()
-    duplicate_node_renamer_ui.show()
-    duplicate_node_renamer_ui.setParent(maya_main_window())
+    try:
+        duplicate_node_renamer_ui.close()  # Close the UI if it already exists
+    except:
+        pass
 
-"""
-Created By Jayanth
-"""
+    # Create and show the UI
+    parent = maya_main_window()
+    duplicate_node_renamer_ui = DuplicateNodeRenamerUI(parent)
+    duplicate_node_renamer_ui.show()
