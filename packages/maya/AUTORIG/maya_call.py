@@ -1,20 +1,22 @@
 import os
-from PySide2.QtWidgets import QApplication, QVBoxLayout, QPushButton, QWidget
+from PySide2 import QtWidgets, QtCore
 import maya.cmds as cmds
+import maya.OpenMayaUI as omui
+from shiboken2 import wrapInstance
 
-class SimpleWindow(QWidget):
+class SimpleWindow(QtWidgets.QWidget):
     def __init__(self):
         super(SimpleWindow, self).__init__()
 
         self.setWindowTitle("Simple PySide2 Window")
 
         # Create layout
-        layout = QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
 
         # Create buttons
-        self.load_position_button = QPushButton("Load Position")
-        self.run_script_button = QPushButton("Run Script")
-        self.selector_button = QPushButton("Selector")
+        self.load_position_button = QtWidgets.QPushButton("Load Position")
+        self.run_script_button = QtWidgets.QPushButton("Run Script")
+        self.selector_button = QtWidgets.QPushButton("Selector")
 
         # Add buttons to layout
         layout.addWidget(self.load_position_button)
@@ -27,7 +29,7 @@ class SimpleWindow(QWidget):
         # Connect buttons to functions
         self.load_position_button.clicked.connect(self.load_position)
         self.run_script_button.clicked.connect(self.run_script)
-        self.close_button.clicked.connect(self.selector_script)
+        self.selector_button.clicked.connect(self.selector_script)
 
     def load_position(self):
         cmds.file('E:\Git___\zarco-pipeline\packages\maya\AUTORIG\characterTuners12.ma', i=True, force=True)
@@ -39,8 +41,13 @@ class SimpleWindow(QWidget):
         print("Close button clicked")
         cmds.file(r"E:\Git___\zarco-pipeline\packages\maya\AUTORIG\selectorInterface5.mel", i=True, force=True)
 
+def get_maya_main_window():
+    main_window_ptr = omui.MQtUtil.mainWindow()
+    return wrapInstance(int(main_window_ptr), QtWidgets.QWidget)
+
 def run():
-    global window
-    window = SimpleWindow()
-    window.show()
+    parent = get_maya_main_window()
+    render_window = SimpleWindow()
+    render_window.setParent(parent, QtCore.Qt.Window)
+    render_window.show()
 

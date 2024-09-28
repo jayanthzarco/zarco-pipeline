@@ -101,11 +101,7 @@ def maya_main_window():
 
 
 def run():
-    try:
-        duplicate_node_renamer_ui.close()
-        duplicate_node_renamer_ui.deleteLater()
-    except:
-        pass
+    global duplicate_node_renamer_ui
 
     duplicate_node_renamer_ui = DuplicateNodeRenamerUI()
     duplicate_node_renamer_ui.show()

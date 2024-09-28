@@ -109,7 +109,7 @@ class RenderWindow(QtWidgets.QWidget):
 # Function to get Maya's main window
 def get_maya_main_window():
     main_window_ptr = omui.MQtUtil.mainWindow()
-    return wrapInstance(long(main_window_ptr), QtWidgets.QWidget)
+    return wrapInstance(int(main_window_ptr), QtWidgets.QWidget)
 
 
 # Create and display the window
